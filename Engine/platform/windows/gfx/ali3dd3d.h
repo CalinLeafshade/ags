@@ -105,6 +105,9 @@ public:
         _vertex = NULL;
         _tiles = NULL;
         _numTiles = 0;
+		_red = 255;
+		_green = 255;
+		_blue = 255;
     }
 
     int GetWidthToRender() { return (_stretchToWidth > 0) ? _stretchToWidth : _width; }

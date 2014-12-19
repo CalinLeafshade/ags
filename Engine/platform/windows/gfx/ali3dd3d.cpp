@@ -940,66 +940,13 @@ void D3DGraphicsDriver::_renderSprite(SpriteDrawListEntry *drawListEntry, bool g
   if (bmpToDraw->_transparency >= 255)
     return;
 
-  if (bmpToDraw->_tintSaturation > 0)
-  {
-    // Use custom pixel shader
-    float vector[8];
-    if (_legacyPixelShader)
-    {
-      rgb_to_hsv(bmpToDraw->_red, bmpToDraw->_green, bmpToDraw->_blue, &vector[0], &vector[1], &vector[2]);
-      vector[0] /= 360.0; // In HSV, Hue is 0-360
-    }
-    else
-    {
-      vector[0] = (float)bmpToDraw->_red / 256.0;
-      vector[1] = (float)bmpToDraw->_green / 256.0;
-      vector[2] = (float)bmpToDraw->_blue / 256.0;
-    }
-
-    vector[3] = (float)bmpToDraw->_tintSaturation / 256.0;
-
-    if (bmpToDraw->_transparency > 0)
-      vector[4] = (float)bmpToDraw->_transparency / 256.0;
-    else
-      vector[4] = 1.0f;
-
-    if (bmpToDraw->_lightLevel > 0)
-      vector[5] = (float)bmpToDraw->_lightLevel / 256.0;
-    else
-      vector[5] = 1.0f;
-
-    direct3ddevice->SetPixelShaderConstantF(0, &vector[0], 2);
-    direct3ddevice->SetPixelShader(pixelShader);
-  }
-  else
-  {
     // Not using custom pixel shader; set up the default one
     direct3ddevice->SetPixelShader(NULL);
-    int useTintRed = 255;
-    int useTintGreen = 255;
-    int useTintBlue = 255;
+    int useTintRed = bmpToDraw->_red;
+    int useTintGreen = bmpToDraw->_green;
+    int useTintBlue = bmpToDraw->_blue;
     int useTransparency = 0xff;
     int textureColorOp = D3DTOP_MODULATE;
-
-    if ((bmpToDraw->_lightLevel > 0) && (bmpToDraw->_lightLevel < 256))
-    {
-      // darkening the sprite... this stupid calculation is for
-      // consistency with the allegro software-mode code that does
-      // a trans blend with a (8,8,8) sprite
-      useTintRed = (bmpToDraw->_lightLevel * 192) / 256 + 64;
-      useTintGreen = useTintRed;
-      useTintBlue = useTintRed;
-    }
-    else if (bmpToDraw->_lightLevel > 256)
-    {
-      // ideally we would use a multi-stage operation here
-      // because we need to do TEXTURE + (TEXTURE x LIGHT)
-      // but is it worth having to set the device to 2-stage?
-      textureColorOp = D3DTOP_ADD;
-      useTintRed = (bmpToDraw->_lightLevel - 256) / 2;
-      useTintGreen = useTintRed;
-      useTintBlue = useTintRed;
-    }
 
     if (bmpToDraw->_transparency > 0)
     {
@@ -1024,7 +971,7 @@ void D3DGraphicsDriver::_renderSprite(SpriteDrawListEntry *drawListEntry, bool g
       direct3ddevice->SetTextureStageState(0, D3DTSS_ALPHAARG1,  D3DTA_TEXTURE);
       direct3ddevice->SetTextureStageState(0, D3DTSS_ALPHAARG2,  D3DTA_TFACTOR);
     }
-  }
+  
 
   if (bmpToDraw->_vertex == NULL)
   {
