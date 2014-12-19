@@ -195,6 +195,7 @@ void game_file_read_script_modules(Stream *in)
         moduleInst.resize(numScriptModules, NULL);
         moduleInstFork.resize(numScriptModules, NULL);
         moduleRepExecAddr.resize(numScriptModules);
+		lateRepExecAlways.moduleHasFunction.resize(numScriptModules, true);
         repExecAlways.moduleHasFunction.resize(numScriptModules, true);
         getDialogOptionsDimensionsFunc.moduleHasFunction.resize(numScriptModules, true);
         renderDialogOptionsFunc.moduleHasFunction.resize(numScriptModules, true);

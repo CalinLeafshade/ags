@@ -116,6 +116,13 @@ void game_loop_check_problems_at_start()
         quit("!A blocking function was called from within a non-blocking event such as " REP_EXEC_ALWAYS_NAME);
 }
 
+void game_loop_do_late_update() {
+    if (in_new_room == 0) {
+        // Run the room and game script late_repeatedly_execute
+        run_function_on_non_blocking_thread(&lateRepExecAlways);
+    }
+}
+
 void game_loop_check_new_room()
 {
     if (in_new_room == 0) {
@@ -619,6 +626,8 @@ void UpdateGameOnce(bool checkControls, IDriverDependantBitmap *extraBitmap, int
     game_loop_do_update();
 
     game_loop_update_animated_buttons();
+
+    game_loop_do_late_update();
 
     update_polled_audio_and_crossfade();
 

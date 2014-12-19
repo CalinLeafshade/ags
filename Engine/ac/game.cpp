@@ -581,6 +581,7 @@ void unload_game_file() {
     moduleInstFork.resize(0);
     moduleInst.resize(0);
     scriptModules.resize(0);
+	lateRepExecAlways.moduleHasFunction.resize(0);
     repExecAlways.moduleHasFunction.resize(0);
     getDialogOptionsDimensionsFunc.moduleHasFunction.resize(0);
     renderDialogOptionsFunc.moduleHasFunction.resize(0);

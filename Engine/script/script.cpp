@@ -69,6 +69,7 @@ int post_script_cleanup_stack = 0;
 int inside_script=0,in_graph_script=0;
 int no_blocking_functions = 0; // set to 1 while in rep_Exec_always
 
+NonBlockingScriptFunction lateRepExecAlways(LATE_REP_EXEC_ALWAYS_NAME, 0);
 NonBlockingScriptFunction repExecAlways(REP_EXEC_ALWAYS_NAME, 0);
 NonBlockingScriptFunction getDialogOptionsDimensionsFunc("dialog_options_get_dimensions", 1);
 NonBlockingScriptFunction renderDialogOptionsFunc("dialog_options_render", 1);
